@@ -1,0 +1,27 @@
+<h1>Checkout</h1>
+
+<%= form_for @order, url: orders_path do |f| %>
+  <div class="form-group">
+    <%= f.label :name %>
+    <%= f.text_field :name, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :address %>
+    <%= f.text_field :address, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email %>
+    <%= f.text_field :email, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :pay_type %>
+    <%= f.select :pay_type, Order::PAYMENT_TYPES, prompt: "Select payment method", class: "form-control" %>
+  </div>
+
+  <%= f.submit "Place Order", class: "btn btn-primary" %>
+<% end %>
+
+<%= button_to "Back to Cart", @cart, class: "btn btn-secondary" %>

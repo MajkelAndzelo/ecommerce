@@ -1,0 +1,28 @@
+<div class="card">
+   <% if @product.image.attached? %>
+  <%= image_tag url_for(@product.image), class: "card-img-top", alt: @product.name, style: "max-width: 100%; max-height: 100%;" %>
+<% else %>
+  <%= image_tag "no-image.jpg", class: "card-img-top", alt: @product.name, style: "max-width: 100%; max-height: 100%;" %>
+<% end %>
+  <div class="card-body">
+    <h5 class="card-title"><%= @product.name %></h5>
+    <p class="card-text"><%= @product.description %></p>
+    <p><%= number_to_currency(@product.price) %></p>
+
+    <% if current_user && (current_user.admin? || current_user == @product.user) %>
+      <%= link_to "Edit", edit_product_path(@product), class: "btn btn-primary" %>
+      <%= button_to "Delete", @product, method: :delete, class: "btn btn-danger", data: { confirm: 'Are you sure?' } %>
+    <% end %>
+
+    <% if current_user %>
+      <%= form_for LineItem.new do |f| %>
+        <%= f.hidden_field :product_id, value: @product.id %>
+        <%= f.hidden_field :cart_id, value: current_cart.id %>
+        <%= f.number_field :quantity, min: 1, max: @product.quantity, value: 1 %>
+        <%= f.submit "Add to Cart", class: "btn btn-primary" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= link_to "Back", products_path, class: "btn btn-secondary" %>

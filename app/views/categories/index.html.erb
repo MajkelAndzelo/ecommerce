@@ -1,0 +1,21 @@
+<h1>Categories</h1>
+
+<% if current_user && current_user.admin? %>
+  <%= link_to "New Category", new_category_path, class: "btn btn-primary" %>
+<% end %>
+
+<% if @categories.any? %>
+  <% @categories.each do |category| %>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><%= category.name %></h5>
+        <p class="card-text"><%= category.description %></p>
+        <%= link_to "View Products", category_products_path(category), class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <p>No categories found.</p>
+<% end %>
+
+<%= link_to "Back", root_path, class: "btn btn-secondary" %>

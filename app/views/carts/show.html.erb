@@ -1,0 +1,25 @@
+<h1>Cart</h1>
+<ul class="list-group list-group-flush">
+  <% @cart.line_items.each do |item| %>
+    <li class="list-group-item">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <%= item.product.name %>
+        </div>
+        <<div>
+          <span><%= number_to_currency(item.product.price) %></span> x <span><%= item.quantity %></span>
+        </div>
+        <div>
+          <span><%= number_to_currency(item.total_price) %></span>
+        </div>
+      </div>
+    </li>
+  <% end %>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Total:
+    <span><%= number_to_currency(@cart.total_price) %></span>
+  </li>
+</ul>
+
+<%= button_to "Checkout", new_order_path, method: :get, class: "btn btn-primary mr-2" %>
+<%= button_to "Clear Cart", clear_cart_path, method: :delete, data: { confirm: 'Are you sure you want to clear your cart?' }, class: "btn btn-danger" %>

@@ -1,0 +1,36 @@
+<h1><%= @category.name %></h1>
+
+<% if @products.any? %>
+  <div class="row">
+    <% @products.each do |product| %>
+      <div class="col-md-4 mb-3">
+        <div class="card" style="width: 70%;">
+          <%= image_tag url_for(product.image), class: "card-img-top", alt: product.name, style: "max-width: 100%; max-height: 100%;" %>
+          <div class="card-body">
+            <h5 class="card-title"><%= product.name %></h5>
+            <p class="card-text"><%= product.description %></p>
+            <p><%= number_to_currency(product.price) %></p>
+
+            <% if current_user && (current_user.admin? || current_user == product.user) %>
+              <%= link_to "Edit", edit_product_path(product), class: "btn btn-primary mr-2" %>
+              <%= button_to "Delete", product, method: :delete, class: "btn btn-danger", data: { confirm: 'Are you sure?' } %>
+            <% end %>
+
+            <% if current_user %>
+              <%= form_for LineItem.new do |f| %>
+                <%= f.hidden_field :product_id, value: product.id %>
+                <%= f.hidden_field :cart_id, value: current_cart.id %>
+                <%= f.number_field :quantity, min: 1, max: product.quantity, value: 1 %>
+                <%= f.submit "Add to Cart", class: "btn btn-primary" %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>No products found.</p>
+<% end %>
+
+<%= link_to "Back", categories_path, class: "btn btn-secondary" %>

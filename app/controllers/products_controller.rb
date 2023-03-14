@@ -1,0 +1,65 @@
+class ProductsController < ApplicationController
+    before_action :require_login, except: [:index, :show]
+    before_action :set_product, only: [:show, :edit, :update, :destroy]
+    before_action :require_owner_or_admin, only: [:edit, :update, :destroy]
+
+    def index
+      @products = Product.paginate(page: params[:page], per_page: 1)
+      params.permit(:page)
+    end
+    
+  
+    def new
+      @product = current_user.products.build
+    end
+  
+    def create
+      @product = current_user.products.build(product_params)
+      @product.image = params[:product][:image]
+      if @product.save
+        redirect_to @product, notice: "Product created successfully"
+      else
+        render :new
+      end
+    end
+  
+    def edit
+    end
+  
+    def update
+      if @product.update(product_params)
+        @product.image = params[:product][:image] if params[:product][:image].present?
+        redirect_to @product, notice: "Product updated successfully"
+      else
+        render :edit
+      end
+    end
+  
+    def destroy
+      @product.destroy
+      redirect_to products_path, notice: "Product deleted successfully"
+    end
+  
+    def show
+      @line_item = LineItem.new
+    end
+  
+    private
+  
+    def product_params
+      params.require(:product).permit(:name, :description, :price, :image, :category_id, :quantity)
+    end
+    
+    
+    
+    def set_product
+        @product = Product.find(params[:id])
+    end
+    
+    def require_owner_or_admin
+        unless current_user.admin? || current_user == @product.user
+          redirect_to @product, alert: "You are not authorized to perform this action"
+        end
+    end
+end
+    

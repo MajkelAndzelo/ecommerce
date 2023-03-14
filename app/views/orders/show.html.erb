@@ -1,0 +1,48 @@
+<h1>Order Details</h1>
+
+<div class="row">
+  <div class="col-md-6">
+    <h4>Shipping Information</h4>
+    <p><strong>Name:</strong> <%= @order.name %></p>
+    <p><strong>Address:</strong> <%= @order.address %></p>
+    <p><strong>Email:</strong> <%= @order.email %></p>
+  </div>
+  
+  <div class="col-md-6">
+    <h4>Payment Information</h4>
+    <p><strong>Pay Type:</strong> <%= @order.pay_type %></p>
+  </div>
+</div>
+
+<hr>
+
+<h4>Order Items:</h4>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <% @order.line_items.each do |item| %>
+      <tr>
+        <td><%= item.product.name %></td>
+        <td><%= number_to_currency(item.product.price) %></td>
+        <td><%= item.quantity %></td>
+        <td><%= number_to_currency(item.total_price) %></td>
+      </tr>
+    <% end %>
+    
+    <tr>
+      <td colspan="3">Total:</td>
+      <td><%= number_to_currency(@order.total_price) %></td>
+    </tr>
+  </tbody>
+</table>
+
+<%= link_to "Back to Store", root_path, class: "btn btn-primary" %>
