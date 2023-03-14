@@ -7,13 +7,10 @@ class OrdersController < ApplicationController
   end
   
   def create
-    @order = Order.new(order_params)
     @order = current_user.orders.build(order_params)
-    @order.name = current_user.nickname
     @order.cart = current_cart
-    
+  
     if @order.save
-      current_cart.destroy
       session.delete(:cart_id)
       puts "Order created successfully!"
       redirect_to order_path(@order)
@@ -23,6 +20,9 @@ class OrdersController < ApplicationController
       render :new
     end
   end
+  
+  
+  
   
   def show
     @order = Order.find(params[:id])

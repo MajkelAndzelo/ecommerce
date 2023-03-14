@@ -36,6 +36,7 @@ class ProductsController < ApplicationController
     end
   
     def destroy
+      @product.line_items.destroy_all
       @product.destroy
       redirect_to products_path, notice: "Product deleted successfully"
     end
