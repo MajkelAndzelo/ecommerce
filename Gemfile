@@ -23,7 +23,7 @@ gem "turbo-rails"
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
-
+gem 'rspec-rails'
 gem 'will_paginate'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
