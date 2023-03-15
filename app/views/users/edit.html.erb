@@ -1,6 +1,7 @@
 <h1>Edit User</h1>
 
-<%= form_for @user do |f| %>
+<!-- Form for updating personal details -->
+<%= form_for @user, url: user_path(@user) do |f| %>
   <% if @user.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -19,8 +20,8 @@
   </div>
 
   <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %><br />
+    <%= f.label :first_name %><br />
+    <%= f.text_field :first_name %><br />
   </div>
 
   <div class="field">
@@ -47,5 +48,7 @@
     <%= f.submit %>
   </div>
 <% end %>
-
+<div class="actions">
+<%= link_to 'Change Password', password_edit_user_path(@user) %>
+</div>
 <%= link_to 'Back', users_path %>

@@ -1,8 +1,9 @@
 class UsersController < ApplicationController
-    before_action :require_login, only: [:edit, :update]
-    before_action :require_admin, only: [:index, :destroy]
-    before_action :set_user, only: [:edit, :update, :destroy]
-    before_action :require_owner_or_admin, only: [:edit, :update, :destroy]
+  before_action :require_login, only: [:edit, :update, :password_edit, :update_password]
+  before_action :require_admin, only: [:index, :destroy]
+  before_action :set_user, only: [:edit, :update, :destroy, :password_edit, :update_password]
+  before_action :correct_user, only: [:edit, :update, :destroy, :password_edit, :update_password]
+  before_action :require_owner_or_admin, only: [:edit, :update, :destroy, :password_edit, :update_password]
   
     def index
       @users = User.all
@@ -32,6 +33,24 @@ class UsersController < ApplicationController
         render :edit
       end
     end
+
+    
+    def update_password
+      @user = User.find(params[:id])
+      if @user.authenticate(params[:user][:old_password])
+        if @user.update_with_password(update_password_params)
+          redirect_to root_path, notice: "Your password has been updated"
+        else
+          flash.now[:alert] = "There was a problem updating your password: " + @user.errors.full_messages.join(", ")
+          render :password_edit
+        end
+      else
+        flash.now[:alert] = "Your old password is incorrect"
+        render :password_edit
+      end
+    end
+    
+    
   
     def destroy
       @user.destroy
@@ -40,14 +59,34 @@ class UsersController < ApplicationController
 
     private
   
-    def user_params
-        params.require(:user).permit(:nickname, :email, :password, :password_confirmation, :first_name)
+    def password_edit
+      @user = User.find(params[:id])
+      require_owner_or_admin
     end
+
+    def correct_user
+      unless @user == current_user
+        flash[:alert] = "You are not permitted to edit other users profiles"
+        redirect_to root_path
+      end
+    end
+
+    def user_params
+      params.require(:user).permit(:nickname,:first_name, :last_name, :email, :password, :password_confirmation)
+    end
+    
+    def update_password_params
+      params.require(:user).permit(:old_password, :new_password, :new_password_confirmation)
+    end
+    
     def admin?
         role == "admin"
     end
     def set_user
       @user = User.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      flash[:alert] = "You are not permitted to edit other users profiles"
+      redirect_to root_path
     end
   
     def require_owner_or_admin

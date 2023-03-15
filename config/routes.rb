@@ -16,13 +16,16 @@ Rails.application.routes.draw do
 
   resources :users do
     resources :products
+    get 'password_edit', on: :member
   end
   resources :orders, only: [:new, :create, :show]
   resources :categories do
     resources :products
   end
   resources :line_items
+  patch 'users/:id/update_password', to: 'users#update_password', as: 'update_password_user'
 
+  
 
   resources :products do
     resources :line_items, only: [:create, :destroy]
