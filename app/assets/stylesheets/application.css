@@ -34,4 +34,6 @@
     column-gap: 10px;
   }
   
-  
+  .list-group {
+    width: 50%;
+  }

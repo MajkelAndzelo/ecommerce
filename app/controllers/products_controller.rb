@@ -2,12 +2,16 @@ class ProductsController < ApplicationController
     before_action :require_login, except: [:index, :show]
     before_action :set_product, only: [:show, :edit, :update, :destroy]
     before_action :require_owner_or_admin, only: [:edit, :update, :destroy]
+    before_action :my_products, only: [:my_products]
+
 
     def index
       @products = Product.paginate(page: params[:page], per_page: 1)
       params.permit(:page)
     end
-    
+    def my_products
+      @products = current_user.products
+    end
   
     def new
       @product = current_user.products.build
@@ -51,9 +55,7 @@ class ProductsController < ApplicationController
       params.require(:product).permit(:name, :description, :price, :image, :category_id, :quantity)
     end
     
-    def my_products
-      @products = current_user.products
-    end
+   
     
     def set_product
         @product = Product.find(params[:id])

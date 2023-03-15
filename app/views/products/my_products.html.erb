@@ -1,11 +1,13 @@
 <h1>My Products</h1>
 
 <% if @products.present? && @products.any? %>
+<div class="list-group">
   <ul>
     <% @products.each do |product| %>
-      <li><%= link_to product.title, product %></li>
+      <%= link_to product.name, product, class: "list-group-item list-group-item-action" %>
     <% end %>
   </ul>
+</div>
 <% else %>
   <p>You haven't added any products yet. </p>
   <%= link_to 'Add new product', new_product_path, class: "btn btn-primary" %>
