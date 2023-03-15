@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get '/orders/new', to: 'orders#new', as: 'new_order'
   delete 'cart', to: 'carts#destroy', as: :clear_cart
   get '/bootstrap', to: 'static#bootstrap'
-
+  get 'my_products', to: 'products#my_products'
   resources :users do
     resources :products
     get 'password_edit', on: :member

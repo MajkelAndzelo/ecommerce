@@ -51,7 +51,9 @@ class ProductsController < ApplicationController
       params.require(:product).permit(:name, :description, :price, :image, :category_id, :quantity)
     end
     
-    
+    def my_products
+      @products = current_user.products
+    end
     
     def set_product
         @product = Product.find(params[:id])
