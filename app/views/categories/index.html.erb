@@ -10,7 +10,7 @@
       <div class="card-body">
         <h5 class="card-title"><%= category.name %></h5>
         <p class="card-text"><%= category.description %></p>
-        <%= link_to "View Products", category_products_path(category), class: "btn btn-primary" %>
+        <%= link_to "View Products", products_path(category_id: category.id), class: "btn btn-primary" %>
       </div>
     </div>
   <% end %>
