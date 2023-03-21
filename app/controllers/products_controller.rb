@@ -5,10 +5,17 @@ class ProductsController < ApplicationController
     before_action :my_products, only: [:my_products]
 
 
+
     def index
-      @products = Product.paginate(page: params[:page], per_page: 1)
-      params.permit(:page)
+      if params[:category_id]
+        @category = Category.find(params[:category_id])
+        @products = @category.products.paginate(page: params[:page], per_page: 1) 
+      else
+        @products = Product.all.paginate(page: params[:page], per_page: 1) 
+      end
+      
     end
+
     def my_products
       @products = current_user.products
     end
@@ -52,7 +59,7 @@ class ProductsController < ApplicationController
     private
   
     def product_params
-      params.require(:product).permit(:name, :description, :price, :image, :category_id, :quantity)
+      params.require(:product).permit(:name, :description, :price, :image, :category_id, :quantity, :page)
     end
     
    
