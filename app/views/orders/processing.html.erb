@@ -6,7 +6,7 @@
 
 <script>
   $(document).ready(function() {
-    // check for the order status every 5 seconds
+    
     var intervalId = setInterval(function() {
       $.ajax({
         url: '<%= order_status_path %>',
@@ -14,8 +14,8 @@
         dataType: 'json',
         success: function(data) {
           if (data.order_created) {
-            clearInterval(intervalId); // stop the interval
-            window.location.href = '<%= order_path(@order) %>'; // redirect to the order details page
+            clearInterval(intervalId);
+            window.location.href = '<%= order_path(@order) %>'; 
           }
         },
         error: function(jqXHR, textStatus, errorThrown) {

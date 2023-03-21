@@ -1,7 +1,7 @@
 class LineItemsController < ApplicationController
   def create
     @cart = current_cart
-    @product = Product.find(params[:line_item][:product_id]) # get the product ID from the params
+    @product = Product.find(params[:line_item][:product_id])
     @line_item = @cart.line_items.build(product: @product, quantity: params[:line_item][:quantity])
     if @line_item.save
       redirect_to cart_path(@cart), notice: "Product added to cart"
